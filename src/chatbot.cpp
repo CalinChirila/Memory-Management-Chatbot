@@ -21,7 +21,6 @@ ChatBot::ChatBot()
 ChatBot::ChatBot(std::string filename)
 {
     std::cout << "ChatBot Constructor" << std::endl;
-    
     // invalidate data handles
     _chatLogic = nullptr;
     _rootNode = nullptr;
@@ -44,19 +43,103 @@ ChatBot::~ChatBot()
 
 //// STUDENT CODE
 ////
+ChatBot::ChatBot(ChatBot &&source){
+    std::cout << "ChatBot Move Constructor" << std::endl;
+  
+    _rootNode = source._rootNode;
+    source._rootNode = nullptr;
+  
+    _image = source._image;
+    source._image = nullptr;
+  
+    _currentNode = source._currentNode;
+    source._currentNode = nullptr;
+}
+
+ChatBot::ChatBot(ChatBot &source){
+    std::cout << "ChatBot Copy Constructor" << std::endl;
+  
+    _rootNode = source._rootNode;
+    source._rootNode = nullptr;
+  
+    _image = source._image;
+    source._image = nullptr;
+  
+    _currentNode = source._currentNode;
+    source._currentNode = nullptr;
+}
+
+ChatBot& ChatBot::operator=(ChatBot &source){
+    std::cout << "ChatBot Assignment Operator" << std::endl;
+  
+    if(this == &source){
+      return *this;
+    }
+    
+    //delete[] _rootNode;
+    _rootNode = source._rootNode;
+    source._rootNode = nullptr;
+   
+    //delete[] _image;
+    _image = source._image;
+    source._image = nullptr;
+    
+  
+    //delete[] _currentNode;
+    _currentNode = source._currentNode;
+    source._currentNode = nullptr;
+  
+    // _chatLogic is unique_ptr
+    //_chatLogic = source._chatLogic;
+    //source._chatLogic = nullptr;
+  
+    return *this;
+}
+
+ChatBot& ChatBot::operator=(ChatBot &&source){
+    std::cout << "ChatBot Move Assignment Operator" << std::endl;
+  
+    if(this == &source){
+      return *this;
+    }
+    
+    //delete[] _rootNode;
+    _rootNode = source._rootNode;
+    source._rootNode = nullptr;
+   
+    //delete[] _image;
+    _image = source._image;
+    source._image = nullptr;
+  
+    //delete[] _currentNode;
+    _currentNode = source._currentNode;
+    source._currentNode = nullptr;
+  
+    // _chatLogic is unique_ptr
+    //_chatLogic = source._chatLogic;
+    //source._chatLogic = nullptr;
+  
+    return *this;
+}
 
 ////
 //// EOF STUDENT CODE
 
 void ChatBot::ReceiveMessageFromUser(std::string message)
 {
+  std::cout << "ChatBot::ReceiveMessageFromUser" << std::endl;
     // loop over all edges and keywords and compute Levenshtein distance to query
     typedef std::pair<GraphEdge *, int> EdgeDist;
     std::vector<EdgeDist> levDists; // format is <ptr,levDist>
-
+    
+    
     for (size_t i = 0; i < _currentNode->GetNumberOfChildEdges(); ++i)
     {
+        
         GraphEdge *edge = _currentNode->GetChildEdgeAtIndex(i);
+        if(!edge){
+          std::cout << "edge is null" << std::endl;
+        }
         for (auto keyword : edge->GetKeywords())
         {
             EdgeDist ed{edge, ComputeLevenshteinDistance(keyword, message)};
@@ -84,6 +167,7 @@ void ChatBot::ReceiveMessageFromUser(std::string message)
 
 void ChatBot::SetCurrentNode(GraphNode *node)
 {
+  std::cout << "ChatBot::SetCurrentNode" << std::endl;
     // update pointer to current node
     _currentNode = node;
 
@@ -99,6 +183,7 @@ void ChatBot::SetCurrentNode(GraphNode *node)
 
 int ChatBot::ComputeLevenshteinDistance(std::string s1, std::string s2)
 {
+  std::cout << "ChatBot::ComputeLevenshteinDistance" << std::endl;
     // convert both strings to upper-case before comparing
     std::transform(s1.begin(), s1.end(), s1.begin(), ::toupper);
     std::transform(s2.begin(), s2.end(), s2.begin(), ::toupper);

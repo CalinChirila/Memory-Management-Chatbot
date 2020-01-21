@@ -3,15 +3,17 @@
 
 GraphNode::GraphNode(int id)
 {
+  std::cout << "GraphNode constructor" << std::endl;
     _id = id;
 }
 
 GraphNode::~GraphNode()
 {
+  std::cout << "GraphNode destructor" << std::endl;
     //// STUDENT CODE
     ////
-
-    delete _chatBot; 
+  
+    //delete _chatBot; 
 
     ////
     //// EOF STUDENT CODE
@@ -19,29 +21,34 @@ GraphNode::~GraphNode()
 
 void GraphNode::AddToken(std::string token)
 {
+  std::cout << "GraphNode::AddToken" << std::endl;
     _answers.push_back(token);
 }
 
-void GraphNode::AddEdgeToParentNode(GraphEdge *edge)
+void GraphNode::AddEdgeToParentNode(std::unique_ptr<GraphEdge>& edge)
 {
-    _parentEdges.push_back(edge);
+  std::cout << "GraphNode::AddEdgeToParentNode" << std::endl;
+    _parentEdges.emplace_back(std::move(edge));
 }
 
-void GraphNode::AddEdgeToChildNode(GraphEdge *edge)
+void GraphNode::AddEdgeToChildNode(std::unique_ptr<GraphEdge>& edge)
 {
-    _childEdges.push_back(edge);
+  std::cout << "GraphNode::AddEdgeToChildNode. _childEdges size: " << _childEdges.size() << std::endl;
+    _childEdges.emplace_back(std::move(edge));
 }
 
 //// STUDENT CODE
 ////
-void GraphNode::MoveChatbotHere(ChatBot *chatbot)
+void GraphNode::MoveChatbotHere(std::shared_ptr<ChatBot> chatBot)
 {
-    _chatBot = chatbot;
-    _chatBot->SetCurrentNode(this);
+  std::cout << "GraphNode::MoveChatbotHere" << std::endl;
+    _chatBot = chatBot;
+    chatBot->SetCurrentNode(this);
 }
 
 void GraphNode::MoveChatbotToNewNode(GraphNode *newNode)
 {
+  std::cout << "GraphNode::MoveChatbotToNewNode" << std::endl;
     newNode->MoveChatbotHere(_chatBot);
     _chatBot = nullptr; // invalidate pointer at source
 }
@@ -50,10 +57,14 @@ void GraphNode::MoveChatbotToNewNode(GraphNode *newNode)
 
 GraphEdge *GraphNode::GetChildEdgeAtIndex(int index)
 {
+  std::cout << "GraphNode::GetChildEdgeAtIndex" << std::endl;
     //// STUDENT CODE
     ////
-
-    return _childEdges[index];
+	auto childEdge = _childEdges[index].get();
+    if(!childEdge){
+      std::cout << "childEdge is null" << std::endl;
+    }
+    return childEdge;
 
     ////
     //// EOF STUDENT CODE
