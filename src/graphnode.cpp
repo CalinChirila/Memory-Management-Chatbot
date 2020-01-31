@@ -25,32 +25,38 @@ void GraphNode::AddToken(std::string token)
     _answers.push_back(token);
 }
 
-void GraphNode::AddEdgeToParentNode(std::unique_ptr<GraphEdge>& edge)
+void GraphNode::AddEdgeToParentNode(GraphEdge* edge)
 {
-  std::cout << "GraphNode::AddEdgeToParentNode" << std::endl;
-    _parentEdges.emplace_back(std::move(edge));
+    _parentEdges.emplace_back(edge);
+  std::cout << "GraphNode::AddEdgeToParentNode. Node " << this->GetID() << " _parentEdges size: " << _parentEdges.size() << std::endl;
 }
 
-void GraphNode::AddEdgeToChildNode(std::unique_ptr<GraphEdge>& edge)
+void GraphNode::AddEdgeToChildNode(std::shared_ptr<GraphEdge> edge)
 {
-  std::cout << "GraphNode::AddEdgeToChildNode. _childEdges size: " << _childEdges.size() << std::endl;
-    _childEdges.emplace_back(std::move(edge));
+    _childEdges.emplace_back(edge);
+  std::cout << "GraphNode::AddEdgeToChildNode. Node " << this->GetID() << " _childEdges size: " << _childEdges.size() << std::endl;
 }
 
 //// STUDENT CODE
 ////
-void GraphNode::MoveChatbotHere(std::shared_ptr<ChatBot> chatBot)
+void GraphNode::MoveChatbotHere(ChatBot* chatBot)
 {
   std::cout << "GraphNode::MoveChatbotHere" << std::endl;
-    _chatBot = chatBot;
-    chatBot->SetCurrentNode(this);
+  	//(*_chatBot) = chatBot;	// this triggers the assignment operator
+    //_chatBot = std::make_unique<ChatBot>((*chatBot.get()));
+  
+  	//auto tempChatbot = ChatBot(std::move(chatBot));
+    _chatBot = std::move(chatBot);
+  	_chatBot->SetCurrentNode(this);
+  	//_chatBot = ChatBot(chatBot);
+    //(*_chatBot) = std::move(chatBot);
 }
 
 void GraphNode::MoveChatbotToNewNode(GraphNode *newNode)
 {
   std::cout << "GraphNode::MoveChatbotToNewNode" << std::endl;
-    newNode->MoveChatbotHere(_chatBot);
-    _chatBot = nullptr; // invalidate pointer at source
+    newNode->MoveChatbotHere(std::move(_chatBot));
+    //_chatBot = nullptr; // invalidate pointer at source
 }
 ////
 //// EOF STUDENT CODE
@@ -61,9 +67,7 @@ GraphEdge *GraphNode::GetChildEdgeAtIndex(int index)
     //// STUDENT CODE
     ////
 	auto childEdge = _childEdges[index].get();
-    if(!childEdge){
-      std::cout << "childEdge is null" << std::endl;
-    }
+    
     return childEdge;
 
     ////

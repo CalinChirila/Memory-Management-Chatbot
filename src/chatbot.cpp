@@ -76,22 +76,26 @@ ChatBot& ChatBot::operator=(ChatBot &source){
       return *this;
     }
     
-    //delete[] _rootNode;
+    //delete[] _rootNode
+  std::cout << "test1" << std::endl;
     _rootNode = source._rootNode;
     source._rootNode = nullptr;
    
     //delete[] _image;
+  std::cout << "test2" << std::endl;
     _image = source._image;
     source._image = nullptr;
     
   
     //delete[] _currentNode;
+  std::cout << "test3" << std::endl;
     _currentNode = source._currentNode;
     source._currentNode = nullptr;
   
     // _chatLogic is unique_ptr
-    //_chatLogic = source._chatLogic;
-    //source._chatLogic = nullptr;
+  std::cout << "test4" << std::endl;
+    _chatLogic = source._chatLogic;
+    source._chatLogic = nullptr;
   
     return *this;
 }
@@ -103,21 +107,41 @@ ChatBot& ChatBot::operator=(ChatBot &&source){
       return *this;
     }
     
+    std::cout << "1" << std::endl;
     //delete[] _rootNode;
     _rootNode = source._rootNode;
     source._rootNode = nullptr;
    
+  std::cout << "2" << std::endl;
     //delete[] _image;
     _image = source._image;
     source._image = nullptr;
   
+  std::cout << "3" << std::endl;
     //delete[] _currentNode;
     _currentNode = source._currentNode;
     source._currentNode = nullptr;
   
+  std::cout << "4" << std::endl;
     // _chatLogic is unique_ptr
-    //_chatLogic = source._chatLogic;
-    //source._chatLogic = nullptr;
+    _chatLogic = source._chatLogic;
+    source._chatLogic = nullptr;
+  
+  if(!_rootNode){
+      std::cout << "destination rootNode is null" <<std::endl;
+    }
+  
+  if(!_image){
+      std::cout << "destination _image is null" <<std::endl;
+    }
+  
+  if(!_currentNode){
+      std::cout << "destination _currentNode is null" <<std::endl;
+    }
+  
+  if(!_chatLogic){
+      std::cout << "destination _chatLogic is null" <<std::endl;
+    }
   
     return *this;
 }
@@ -130,12 +154,15 @@ void ChatBot::ReceiveMessageFromUser(std::string message)
   std::cout << "ChatBot::ReceiveMessageFromUser" << std::endl;
     // loop over all edges and keywords and compute Levenshtein distance to query
     typedef std::pair<GraphEdge *, int> EdgeDist;
+    if(!this){std::cout<<"chatBot is null" << std::endl;}
     std::vector<EdgeDist> levDists; // format is <ptr,levDist>
-    
-    
+  	
+  
+  //std::cout << _currentNode->GetNumberOfChildEdges() << std::endl; // current node is null
+
     for (size_t i = 0; i < _currentNode->GetNumberOfChildEdges(); ++i)
     {
-        
+      
         GraphEdge *edge = _currentNode->GetChildEdgeAtIndex(i);
         if(!edge){
           std::cout << "edge is null" << std::endl;
@@ -167,10 +194,9 @@ void ChatBot::ReceiveMessageFromUser(std::string message)
 
 void ChatBot::SetCurrentNode(GraphNode *node)
 {
-  std::cout << "ChatBot::SetCurrentNode" << std::endl;
+    std::cout << "ChatBot::SetCurrentNode" << std::endl;
     // update pointer to current node
     _currentNode = node;
-
     // select a random node answer (if several answers should exist)
     std::vector<std::string> answers = _currentNode->GetAnswers();
     std::mt19937 generator(int(std::time(0)));
