@@ -60,7 +60,7 @@ public:
     wxBitmap *GetImageHandle() {
     	return _image; 
     }
-
+    
     // communication
     void ReceiveMessageFromUser(std::string message);
 };

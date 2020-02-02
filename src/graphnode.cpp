@@ -39,14 +39,15 @@ void GraphNode::AddEdgeToChildNode(std::shared_ptr<GraphEdge> edge)
 
 //// STUDENT CODE
 ////
-void GraphNode::MoveChatbotHere(ChatBot* chatBot)
+void GraphNode::MoveChatbotHere(ChatBot *chatBot)
 {
   std::cout << "GraphNode::MoveChatbotHere" << std::endl;
   	//(*_chatBot) = chatBot;	// this triggers the assignment operator
     //_chatBot = std::make_unique<ChatBot>((*chatBot.get()));
   
   	//auto tempChatbot = ChatBot(std::move(chatBot));
-    _chatBot = std::move(chatBot);
+  	_chatBot = chatBot;
+    (*_chatBot) = (*chatBot);
   	_chatBot->SetCurrentNode(this);
   	//_chatBot = ChatBot(chatBot);
     //(*_chatBot) = std::move(chatBot);
@@ -63,11 +64,14 @@ void GraphNode::MoveChatbotToNewNode(GraphNode *newNode)
 
 GraphEdge *GraphNode::GetChildEdgeAtIndex(int index)
 {
-  std::cout << "GraphNode::GetChildEdgeAtIndex" << std::endl;
+  std::cout << "GraphNode::GetChildEdgeAtIndex: " << index << std::endl;
+  std::cout << "Child edges at node " << this->GetID() << " => " << _childEdges.size() << std::endl;
     //// STUDENT CODE
     ////
+  if(_childEdges[0]){
+    std::cout << "smart pointers in childEdges" << std::endl;
+  }
 	auto childEdge = _childEdges[index].get();
-    
     return childEdge;
 
     ////
