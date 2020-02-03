@@ -46,27 +46,27 @@ ChatBot::~ChatBot()
 ChatBot::ChatBot(ChatBot &&source){
     std::cout << "ChatBot Move Constructor" << std::endl;
   
-    _rootNode = source._rootNode;
-    source._rootNode = nullptr;
+    //_rootNode = source._rootNode;
+    //source._rootNode = nullptr;
   
     _image = source._image;
     source._image = nullptr;
   
-    _currentNode = source._currentNode;
-    source._currentNode = nullptr;
+    //_currentNode = source._currentNode;
+    //source._currentNode = nullptr;
 }
 
 ChatBot::ChatBot(ChatBot &source){
     std::cout << "ChatBot Copy Constructor" << std::endl;
   
-    _rootNode = source._rootNode;
-    source._rootNode = nullptr;
+    //_rootNode = source._rootNode;
+    //source._rootNode = nullptr;
   
     _image = source._image;
     source._image = nullptr;
   
-    _currentNode = source._currentNode;
-    source._currentNode = nullptr;
+    //_currentNode = source._currentNode;
+    //source._currentNode = nullptr;
 }
 
 ChatBot& ChatBot::operator=(ChatBot &source){
@@ -78,8 +78,8 @@ ChatBot& ChatBot::operator=(ChatBot &source){
     
     //delete[] _rootNode
   std::cout << "test1" << std::endl;
-    _rootNode = source._rootNode;
-    source._rootNode = nullptr;
+    //_rootNode = source._rootNode;
+    //source._rootNode = nullptr;
    
     //delete[] _image;
   std::cout << "test2" << std::endl;
@@ -89,13 +89,13 @@ ChatBot& ChatBot::operator=(ChatBot &source){
   
     //delete[] _currentNode;
   std::cout << "test3" << std::endl;
-    _currentNode = source._currentNode;
-    source._currentNode = nullptr;
+    //_currentNode = source._currentNode;
+    //source._currentNode = nullptr;
   
     // _chatLogic is unique_ptr
   std::cout << "test4" << std::endl;
-    _chatLogic = source._chatLogic;
-    source._chatLogic = nullptr;
+    //_chatLogic = source._chatLogic;
+    //source._chatLogic = nullptr;
   
     return *this;
 }
@@ -109,8 +109,8 @@ ChatBot& ChatBot::operator=(ChatBot &&source){
     
     std::cout << "1" << std::endl;
     //delete[] _rootNode;
-    _rootNode = source._rootNode;
-    source._rootNode = nullptr;
+    //_rootNode = source._rootNode;
+    //source._rootNode = nullptr;
    
   std::cout << "2" << std::endl;
     //delete[] _image;
@@ -119,13 +119,13 @@ ChatBot& ChatBot::operator=(ChatBot &&source){
   
   std::cout << "3" << std::endl;
     //delete[] _currentNode;
-    _currentNode = source._currentNode;
-    source._currentNode = nullptr;
+    //_currentNode = source._currentNode;
+    //source._currentNode = nullptr;
   
   std::cout << "4" << std::endl;
     // _chatLogic is unique_ptr
-    _chatLogic = source._chatLogic;
-    source._chatLogic = nullptr;
+    //_chatLogic = source._chatLogic;
+    //source._chatLogic = nullptr;
   
   if(!_rootNode){
       std::cout << "destination rootNode is null" <<std::endl;
@@ -154,15 +154,12 @@ void ChatBot::ReceiveMessageFromUser(std::string message)
   std::cout << "ChatBot::ReceiveMessageFromUser" << std::endl;
     // loop over all edges and keywords and compute Levenshtein distance to query
     typedef std::pair<GraphEdge *, int> EdgeDist;
-    if(!this){std::cout<<"chatBot is null" << std::endl;}
     std::vector<EdgeDist> levDists; // format is <ptr,levDist>
   	
-  
-  //std::cout << _currentNode->GetNumberOfChildEdges() << std::endl; // current node is null
+    std::cout << "Number of child edges for current node: " << _currentNode->GetNumberOfChildEdges() << std::endl; // current node is null
 
     for (size_t i = 0; i < _currentNode->GetNumberOfChildEdges(); ++i)
     {
-      
         GraphEdge *edge = _currentNode->GetChildEdgeAtIndex(i);
         if(!edge){
           std::cout << "edge is null" << std::endl;
