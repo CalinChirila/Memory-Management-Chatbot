@@ -21,6 +21,9 @@ private:
 
     // proprietary functions
     int ComputeLevenshteinDistance(std::string s1, std::string s2);
+    
+    // DEBUG 
+    int _id = 0;
 
 public:
     // constructors / destructors
@@ -30,14 +33,14 @@ public:
 
     //// STUDENT CODE
     ////
-    // Move constructor
-    ChatBot(ChatBot &&source);
     // Copy Constructor
     ChatBot(ChatBot &source);
     // Assignment operator
-    ChatBot& operator=(ChatBot &source);
+    ChatBot & operator = (ChatBot & source);
+    // Move constructor
+    ChatBot(ChatBot && source);
     // Move assignment operator
-    ChatBot& operator=(ChatBot &&source);
+    ChatBot & operator = (ChatBot && source);
     ////
     //// EOF STUDENT CODE
 
