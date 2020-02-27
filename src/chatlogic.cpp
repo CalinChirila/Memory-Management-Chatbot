@@ -160,7 +160,7 @@ void ChatLogic::LoadAnswerGraphFromFile(std::string filename)
                             auto childNode = std::find_if(_nodes.begin(), _nodes.end(), [&childToken](std::shared_ptr<GraphNode>& node) { return node->GetID() == std::stoi(childToken->second); });
                           
                             // create new edge
-                            auto edge = std::make_unique<GraphEdge>(id);
+                            auto edge = std::make_shared<GraphEdge>(id);
                             edge->SetChildNode((*childNode).get()); 
                             edge->SetParentNode((*parentNode).get());
 
@@ -168,8 +168,8 @@ void ChatLogic::LoadAnswerGraphFromFile(std::string filename)
                             AddAllTokensToElement("KEYWORD", tokens, *edge);
 
                             // store reference in child node and parent node
-                            (*childNode)->AddEdgeToParentNode(edge.get());
-                            (*parentNode)->AddEdgeToChildNode(edge.get());
+                            (*childNode)->AddEdgeToParentNode(edge);
+                            (*parentNode)->AddEdgeToChildNode(edge);
                           
                             _edges.emplace_back(edge.get());
 
@@ -256,9 +256,7 @@ void ChatLogic::SendMessageToChatbot(std::string message)
 void ChatLogic::SendMessageToUser(std::string message)
 {
   std::cout << "ChatLogic::SendMessageToUser. Message: " << message << std::endl;
-  if(!_panelDialog) {
-   	std::cout << "_panelDialog is null" << std::endl; 
-  }
+  
     _panelDialog->PrintChatbotResponse(message);
 }
 
@@ -266,8 +264,5 @@ wxBitmap *ChatLogic::GetImageFromChatbot()
 {
   std::cout << "ChatLogic::GetImageFromChatbot" << std::endl;
 
-  if(!_chatBot){
-    std::cout << "Chatbot is null" << std::endl;
-  }
   return _chatBot->GetImageHandle();
 }
